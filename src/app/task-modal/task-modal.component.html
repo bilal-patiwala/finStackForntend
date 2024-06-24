@@ -1,0 +1,86 @@
+<!-- task-modal.component.html -->
+<div>
+    <form [formGroup]="taskForm" (ngSubmit)="onSubmit()" class="px-12 py-8">
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-xl">New Task</p>
+        </div>
+        <div>
+          <button
+            type="button"
+            class="px-6 py-2"
+            [ngClass]="{'bg-[orange]': currentStatus === 'open', 'bg-white border': currentStatus !== 'open'}"
+            (click)="setStatus('open')"
+          >
+            Open
+          </button>
+          <button
+            type="button"
+            class="px-4 py-2"
+            [ngClass]="{'bg-[orange]': currentStatus === 'closed', 'bg-white border': currentStatus !== 'closed'}"
+            (click)="setStatus('closed')"
+          >
+            Closed
+          </button>
+        </div>
+      </div>
+  
+      <div class="my-3 w-[100%]">
+        <input id="entity_name" formControlName="entity_name" type="text" placeholder="Entity name" class="px-6 py-4 w-[100%] bg-gray-200">
+        <div *ngIf="taskForm.get('entity_name')?.touched && taskForm.get('entity_name')?.invalid">
+          <small class="text-red-600">Entity Name is required.</small>
+        </div>
+      </div>
+  <div class="flex gap-8 my-3">
+
+    <div>
+      <input id="date" formControlName="createdAt" type="date" class="px-6 py-4 w-[100%] bg-gray-200">
+      <div *ngIf="taskForm.get('date')?.touched && taskForm.get('date')?.invalid">
+        <small class="text-red-600">Date is required.</small>
+      </div>
+    </div>
+
+    <div >
+      <input id="task_time" formControlName="time_of_task"  type="time" class="px-6 py-4 w-[100%] bg-gray-200">
+      <div *ngIf="taskForm.get('task_time')?.touched && taskForm.get('task_time')?.invalid">
+        <small class="text-red-600">Task Time is required.</small>
+      </div>
+    </div>
+  </div>
+  
+      <div class="my-3">
+        <select name="" id="task_type" formControlName="task_type"  class="px-6 py-4 w-[100%] bg-white border">
+          <option value="call">Call</option>
+          <option value="meeting">Meeting</option>
+          <option value="videoCall">Video Call</option>
+        </select>
+        <div *ngIf="taskForm.get('task_type')?.touched && taskForm.get('task_type')?.invalid">
+          <small class="text-red-600">Task Type is required.</small>
+        </div>
+      </div>
+  
+      <div>
+        <input id="contact_person" formControlName="contact_person" type="text" class="px-6 py-4 w-[100%] bg-gray-200" placeholder="Contact person">
+        <div *ngIf="taskForm.get('contact_person')?.touched && taskForm.get('contact_person')?.invalid">
+          <small class="text-red-600">Contact Person is required.</small>
+        </div>
+      </div>
+  
+      <div class="my-3">
+        <input id="phone_number" formControlName="phone_number" type="text" class="px-6 py-4 w-[100%] bg-gray-200" placeholder="Phone number">
+        <div *ngIf="taskForm.get('phone_number')?.touched && taskForm.get('phone_number')?.invalid">
+          <small class="text-red-600" *ngIf="taskForm.get('phone_number')?.errors?.['required']">Phone Number is required.</small>
+          <small class="text-red-600" *ngIf="taskForm.get('phone_number')?.errors?.['pattern']">Phone Number must be 10 digits.</small>
+        </div>
+      </div>
+  
+      <div class="my-3">
+        <textarea id="note" formControlName="note" class="px-6 py-4 w-[100%] bg-gray-200" placeholder="Note (optional)"></textarea>
+      </div>
+      <div class="flex justify-end gap-4">
+        <button type="button" class="px-8 py-3 border" (click)="close()">Cancel</button>
+        <button type="submit" class="px-8 py-3 bg-cyan-800 text-white ">Save</button>
+      </div>
+    </form>
+  </div>
+  
