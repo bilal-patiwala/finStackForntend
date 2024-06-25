@@ -18,7 +18,6 @@ import { createNewTask } from './task.service';
 })
 export class TaskModalComponent implements OnInit {
   taskForm: FormGroup;
-  currentStatus: string = 'open';
 
   constructor(
     private fb: FormBuilder,
@@ -26,7 +25,7 @@ export class TaskModalComponent implements OnInit {
   ) {
     this.taskForm = this.fb.group({
       entity_name: ['', Validators.required],
-      createdAt: ['', Validators.required],
+      date: ['', Validators.required],
       time_of_task: ['24:00', Validators.required],
       task_type: ['call', Validators.required], // Set default value to 'call'
       contact_person: ['', Validators.required],
@@ -34,7 +33,6 @@ export class TaskModalComponent implements OnInit {
         '',
         [Validators.required, Validators.pattern(/^[0-9]{10}$/)],
       ],
-      status: ['open', Validators.required],
       note: [''],
     });
   }
@@ -47,18 +45,13 @@ export class TaskModalComponent implements OnInit {
     });
   }
 
-  setStatus(status: string) {
-    this.currentStatus = status;
-    this.taskForm.get('status')?.setValue(status);
-  }
-
   onSubmit() {
     console.log(this.taskForm);
-
     if (this.taskForm.valid) {
       console.log(this.taskForm.value);
-      createNewTask(this.taskForm.value);
-      this.close()
+      createNewTask({ ...this.taskForm.value, status: 'open' });
+      this.close();
+      window.location.reload();
     } else {
       console.log('Form is not valid');
       this.taskForm.markAllAsTouched();

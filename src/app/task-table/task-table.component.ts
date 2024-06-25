@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Task, TaskService, getAllTask } from './task.service';
+import { Task, TaskService, getAllTask, changeStatus } from './task.service';
 import { CommonModule } from '@angular/common';
 import {
   MatDialog,
@@ -8,11 +8,12 @@ import {
   MatDialogConfig,
 } from '@angular/material/dialog';
 import { TaskOptionsModalComponent } from '../task-options-modal/task-options-modal.component';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-task-table',
   standalone: true,
-  imports: [CommonModule, MatDialogModule, TaskOptionsModalComponent],
+  imports: [CommonModule, MatDialogModule, TaskOptionsModalComponent, FormsModule],
   templateUrl: './task-table.component.html',
   styleUrls: ['./task-table.component.css'],
 })
@@ -27,7 +28,8 @@ export class TaskTableComponent implements OnInit {
   constructor(private taskService: TaskService, private dialog: MatDialog) {}
 
   taskskeys(): Array<string> {
-    return Object.keys(this.groupedTasks);
+    console.log(Object.keys(this.groupedTasks));
+    return Object.keys(this.groupedTasks).reverse();
   }
 
   ngOnInit(): void {
@@ -37,33 +39,38 @@ export class TaskTableComponent implements OnInit {
   async loadTasks() {
     this.tasks = await getAllTask();
     console.log(this.tasks);
-
     this.groupTasksByDate();
   }
 
-  totalTaskOpen(dateString:string){
-    return this.groupedTasks[dateString].filter((t:Task) => t.status=="Open").length
+  totalTaskOpen(dateString: string) {
+    return this.groupedTasks[dateString].filter((t: Task) => t.status == 'Open')
+      .length;
   }
 
   formatDate(datestring: string): string {
     const date = new Date(datestring);
-    const diff = Math.floor((date.getTime()-new Date().getTime()) / (24 * 60 * 60*1000))+1
-    if(diff<0){
-      return `${Math.abs(diff)} days ago`
+    const diff =
+      Math.floor(
+        (date.getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)
+      ) + 1;
+    if (diff < 0) {
+      return `${Math.abs(diff)} days ago`;
+    } else if (diff > 0) {
+      return `in ${diff} days`;
     }
-    else if(diff>0){
-      return `in ${diff} days`
-    }
-    
+
     return `Today`;
   }
 
   groupTasksByDate(): void {
     this.tasks.forEach((task) => {
-      this.groupedTasks[task.createdAt] = this.tasks.filter(
-        (t) => t.createdAt == task.createdAt
-      );
+      if (!this.groupedTasks[task.date]) {
+        this.groupedTasks[task.date] = [];
+      }
+      this.groupedTasks[task.date].push(task);
     });
+    console.log(this.groupedTasks);
+    
   }
 
   toggleEditMode(task: Task) {
@@ -72,6 +79,10 @@ export class TaskTableComponent implements OnInit {
 
   save(task: Task) {
     this.editModeTasks[task.id] = !this.editModeTasks[task.id];
+  }
+
+  changeStatusToClosed(task:Task){
+    changeStatus(task)
   }
 
   openOptionsModal(task: Task, event: MouseEvent): void {

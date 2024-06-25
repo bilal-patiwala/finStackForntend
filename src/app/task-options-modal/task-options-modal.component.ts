@@ -2,6 +2,7 @@ import { Component, Inject, Output, EventEmitter } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Task } from '../task-table/task.service';
 import { CommonModule } from '@angular/common';
+import { changeStatus } from '../task-table/task.service';
 
 @Component({
   selector: 'app-task-options-modal',
@@ -37,6 +38,7 @@ export class TaskOptionsModalComponent {
   }
 
   changeStatusToClosed(): void {
+    changeStatus(this.task)
     console.log('Changing status to closed:', this.task);
     this.dialogRef.close();
   }
