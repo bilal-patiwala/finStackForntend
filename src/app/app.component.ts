@@ -28,7 +28,7 @@ export class AppComponent {
   title = 'finStackForntend';
   taskModalRef: MatDialogRef<TaskModalComponent> | null = null;
   constructor(private dialog: MatDialog) {}
-
+  
   openTaskModal(event: MouseEvent): void {
     if (this.taskModalRef) {
       this.taskModalRef?.close();
@@ -39,11 +39,11 @@ export class AppComponent {
       const dialogConfig: MatDialogConfig = {
         width: `${dialogWidth}px`,
         position: {
-          left: `${buttonRect.left+100}px`,
-          top: `${buttonRect.top-500}px`,
+          top: '-300px',  // Distance from the top of the viewport
+          left: '430px' // Distance from the right of the viewport
         },
-        hasBackdrop: false,
-        panelClass: 'mat-dialog-position-fixed',
+        hasBackdrop: true,
+        panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
       };
 
       const dialogRef = this.dialog.open(TaskModalComponent, dialogConfig);

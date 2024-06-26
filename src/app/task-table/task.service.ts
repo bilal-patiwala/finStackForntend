@@ -13,22 +13,36 @@ export interface Task {
 }
 
 export const getAllTask: any = async () => {
-  const response = await fetch('http://127.0.0.1:5000/getAllTask');
+  const response = await fetch(
+    'https://finstackbackend.onrender.com/getAllTask'
+  );
   const data = await response.json();
   return data.tasks;
 };
 
-export const changeStatus = async (task:Task) => {
-  const response = await fetch(`http://127.0.0.1:5000/task/${task.id}`,{
-    method:"PATCH",
-    headers:{
-      "Content-Type":"application/json"
+export const changeStatus = async (task: Task) => {
+  const response = await fetch(
+    `https://finstackbackend.onrender.com/task/${task.id}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }
-  })
-  const data = await response.json()
+  );
+  const data = await response.json();
   console.log(data);
-  
-}
+};
+export const deleteTask = async (task: Task) => {
+  const response = await fetch(
+    `https://finstackbackend.onrender.com/task/${task.id}`,
+    {
+      method: 'DELETE',
+    }
+  );
+
+  console.log(await response.json());
+};
 @Injectable({
   providedIn: 'root',
 })

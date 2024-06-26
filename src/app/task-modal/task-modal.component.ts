@@ -45,11 +45,11 @@ export class TaskModalComponent implements OnInit {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
     console.log(this.taskForm);
     if (this.taskForm.valid) {
       console.log(this.taskForm.value);
-      createNewTask({ ...this.taskForm.value, status: 'open' });
+      await createNewTask({ ...this.taskForm.value, status: 'open' });
       this.close();
       window.location.reload();
     } else {

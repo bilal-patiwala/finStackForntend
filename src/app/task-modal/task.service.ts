@@ -16,7 +16,7 @@ function convertTo12HourFormat(time: string): string {
   return `${hours12}:${minute} ${period}`;
 }
 export const createNewTask = async (task: Task) => {
-  const response = await fetch('http://127.0.0.1:5000/newTask', {
+  const response = await fetch('https://finstackbackend.onrender.com/newTask', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -30,5 +30,5 @@ export const createNewTask = async (task: Task) => {
   const data = await response.json();
 
   console.log(data);
-  window.location.reload()
+  // window.location.reload();
 };

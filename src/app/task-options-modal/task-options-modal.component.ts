@@ -14,6 +14,8 @@ import { changeStatus } from '../task-table/task.service';
 export class TaskOptionsModalComponent {
   task: Task;
   @Output() editClicked = new EventEmitter<void>();
+  @Output() deleteClicked = new EventEmitter<void>();
+
 
   constructor(
     public dialogRef: MatDialogRef<TaskOptionsModalComponent>,
@@ -40,6 +42,12 @@ export class TaskOptionsModalComponent {
   changeStatusToClosed(): void {
     changeStatus(this.task)
     console.log('Changing status to closed:', this.task);
+    this.dialogRef.close();
+  }
+
+  deleteTask(): void {
+    console.log('Delete button clicked');
+    this.deleteClicked.emit();
     this.dialogRef.close();
   }
 }
