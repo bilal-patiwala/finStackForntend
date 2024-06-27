@@ -27,7 +27,7 @@ export class TaskModalComponent implements OnInit {
       entity_name: ['', Validators.required],
       date: ['', Validators.required],
       time_of_task: ['24:00', Validators.required],
-      task_type: ['call', Validators.required], // Set default value to 'call'
+      task_type: ['call', Validators.required],
       contact_person: ['', Validators.required],
       phone_number: [
         '',
@@ -41,7 +41,7 @@ export class TaskModalComponent implements OnInit {
   }
   ngOnInit(): void {
     this.taskForm.patchValue({
-      time_of_task: '12:00', // Setting default value to '12:00'
+      time_of_task: '12:00', 
     });
   }
 

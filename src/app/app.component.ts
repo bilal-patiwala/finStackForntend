@@ -39,15 +39,15 @@ export class AppComponent {
       const dialogConfig: MatDialogConfig = {
         width: `${dialogWidth}px`,
         position: {
-          top: '-300px',  // Distance from the top of the viewport
-          left: '430px' // Distance from the right of the viewport
+          top: '-300px',  
+          left: '430px' 
         },
         hasBackdrop: true,
         panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
       };
 
       const dialogRef = this.dialog.open(TaskModalComponent, dialogConfig);
-      //
+      
 
       this.taskModalRef = dialogRef;
     }

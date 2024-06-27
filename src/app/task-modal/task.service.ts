@@ -30,5 +30,4 @@ export const createNewTask = async (task: Task) => {
   const data = await response.json();
 
   console.log(data);
-  // window.location.reload();
 };
