@@ -1,0 +1,13 @@
+<h2>Filter Tasks by Type</h2>
+<form (ngSubmit)="applyFilter()">
+  <label>
+    <input type="checkbox" [(ngModel)]="filters.call" name="call" /> Call
+  </label>
+  <label>
+    <input type="checkbox" [(ngModel)]="filters.meeting" name="meeting" /> Meeting
+  </label>
+  <label>
+    <input type="checkbox" [(ngModel)]="filters.videoCall" name="videoCall" /> Video Call
+  </label>
+  <button type="submit">Apply Filter</button>
+</form>

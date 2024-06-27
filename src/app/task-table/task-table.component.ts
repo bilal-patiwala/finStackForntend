@@ -15,6 +15,7 @@ import {
 } from '@angular/material/dialog';
 import { TaskOptionsModalComponent } from '../task-options-modal/task-options-modal.component';
 import { FormsModule } from '@angular/forms';
+import { TaskFilterModalComponent } from '../task-filter-modal/task-filter-modal.component';
 
 @Component({
   selector: 'app-task-table',
@@ -23,6 +24,7 @@ import { FormsModule } from '@angular/forms';
     CommonModule,
     MatDialogModule,
     TaskOptionsModalComponent,
+    TaskFilterModalComponent,
     FormsModule,
   ],
   templateUrl: './task-table.component.html',
@@ -35,6 +37,7 @@ export class TaskTableComponent implements OnInit {
   optionsModalRefs: {
     [key: string]: MatDialogRef<TaskOptionsModalComponent> | null;
   } = {};
+  filteredTasks: any[] = [];
 
   constructor(private taskService: TaskService, private dialog: MatDialog) {}
 
@@ -50,15 +53,16 @@ export class TaskTableComponent implements OnInit {
     this.tasks = await getAllTask();
     this.tasks = this.tasks.map((task) => ({
       ...task,
-      task_time: task.task_time, // Default time
+      task_time: task.task_time,
       task_type:
         task.task_type == 'Call'
           ? 'call'
           : task.task_type == 'Meeting'
           ? 'meeting'
-          : 'videoCall', // Default task type
-      status: task.status.toLowerCase(), // Default status
+          : 'videoCall',
+      status: task.status.toLowerCase(),
     }));
+    this.filteredTasks = [...this.tasks]; 
     this.groupTasksByDate();
   }
 
@@ -195,4 +199,47 @@ export class TaskTableComponent implements OnInit {
       });
     }
   }
+  openFilterModal(event: MouseEvent): void {
+    const dialogConfig: MatDialogConfig = {
+      width: '250px',
+      position: {
+        top: `${event.clientY}px`,
+        left: `${event.clientX}px`,
+      },
+    };
+
+    const dialogRef = this.dialog.open(TaskFilterModalComponent, dialogConfig);
+
+    dialogRef.componentInstance.filterApplied.subscribe((filters: any) => {
+      this.applyFilter(filters);
+      dialogRef.close();
+    });
+  }
+
+  applyFilter(filters: any): void {
+    this.filteredTasks = this.tasks.filter(task => {
+      return (
+        (filters.call && task.task_type === 'call') ||
+        (filters.meeting && task.task_type === 'meeting') ||
+        (filters.videoCall && task.task_type === 'videoCall')
+      );
+    });
+    this.groupTasksByFilteredType();
+  }
+
+  groupTasksByFilteredType(): void {
+    this.groupedTasks = {};
+    
+    this.filteredTasks.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
+
+    this.filteredTasks.forEach((task) => {
+      if (!this.groupedTasks[task.date]) {
+        this.groupedTasks[task.date] = [];
+      }
+      this.groupedTasks[task.date].push(task);
+    });
+  }
+
 }
