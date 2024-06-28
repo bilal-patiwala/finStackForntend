@@ -15,7 +15,6 @@ export interface Task {
 export const getAllTask: any = async () => {
   const response = await fetch(
     'https://finstackbackend.onrender.com/getAllTask',{
-      mode: 'cors',
     }
   );
   const data = await response.json();
