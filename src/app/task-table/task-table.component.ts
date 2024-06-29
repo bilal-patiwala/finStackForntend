@@ -209,21 +209,22 @@ export class TaskTableComponent implements OnInit {
     else{
       const dialogConfig: MatDialogConfig = {
         width: '250px',
+        
         position: {
-          top: `-10%`,
-          left: `30%`,
+          top: `-200px`,
+          left: `600px`,
         },
         hasBackdrop: true,
-          panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
+        panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
       };
   
       const dialogRef = this.dialog.open(TaskFilterModalComponent, dialogConfig);
   
       this.filterModalRef = dialogRef
-  
+      
       dialogRef.componentInstance.filterApplied.subscribe((filters: any) => {
         this.applyFilter(filters);
-        dialogRef.close();
+        dialogRef.close()
       });
     }
     
@@ -239,7 +240,7 @@ export class TaskTableComponent implements OnInit {
         (filters.videoCall && task.task_type === 'videoCall')
       );
     });
-    this.groupTasksByFilteredType();
+    this.groupTasksByFilteredType();  
   }
 
   groupTasksByFilteredType(): void {

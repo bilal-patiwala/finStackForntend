@@ -23,6 +23,5 @@ constructor(public dialogref:MatDialogRef<TaskFilterModalComponent>){
 
   applyFilter() {
     this.filterApplied.emit(this.filters);
-    this.dialogref.close()
   }
 }
