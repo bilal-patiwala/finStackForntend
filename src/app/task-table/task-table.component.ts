@@ -38,7 +38,7 @@ export class TaskTableComponent implements OnInit {
     [key: string]: MatDialogRef<TaskOptionsModalComponent> | null;
   } = {};
   filteredTasks: any[] = [];
-
+  filterModalRef:MatDialogRef<TaskFilterModalComponent>|null = null
   constructor(private taskService: TaskService, private dialog: MatDialog) {}
 
   taskskeys(): Array<string> {
@@ -150,10 +150,10 @@ export class TaskTableComponent implements OnInit {
   }
 
   async changeStatusToClosed(task: Task) {
-    await changeStatus(task);
-    let index = this.tasks.find((i) => i.id == task.id);
-    this.tasks[index] = { ...task, status: 'closed' };
-    this.loadTasks();
+    changeStatus(task);
+    // let index = this.tasks.find((i) => i.id == task.id);
+    // this.tasks[index] = { ...task, status: 'closed' };
+    // this.loadTasks();
     window.location.reload()
   }
 
@@ -178,6 +178,8 @@ export class TaskTableComponent implements OnInit {
           top: `${-250}px`,
           left: `${buttonRect.left - 250}px`,
         },
+        hasBackdrop: true,
+        panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
       };
 
       const dialogRef = this.dialog.open(
@@ -200,20 +202,33 @@ export class TaskTableComponent implements OnInit {
     }
   }
   openFilterModal(event: MouseEvent): void {
-    const dialogConfig: MatDialogConfig = {
-      width: '250px',
-      position: {
-        top: `${event.clientY}px`,
-        left: `${event.clientX}px`,
-      },
-    };
+    if(this.filterModalRef){
+      this.filterModalRef.close()
+      this.filterModalRef=null
+    }
+    else{
+      const dialogConfig: MatDialogConfig = {
+        width: '250px',
+        position: {
+          top: `-10%`,
+          left: `30%`,
+        },
+        hasBackdrop: true,
+          panelClass: ['custom-dialog-container', 'mat-dialog-position-fixed'],
+      };
+  
+      const dialogRef = this.dialog.open(TaskFilterModalComponent, dialogConfig);
+  
+      this.filterModalRef = dialogRef
+  
+      dialogRef.componentInstance.filterApplied.subscribe((filters: any) => {
+        this.applyFilter(filters);
+        dialogRef.close();
+      });
+    }
+    
 
-    const dialogRef = this.dialog.open(TaskFilterModalComponent, dialogConfig);
 
-    dialogRef.componentInstance.filterApplied.subscribe((filters: any) => {
-      this.applyFilter(filters);
-      dialogRef.close();
-    });
   }
 
   applyFilter(filters: any): void {
